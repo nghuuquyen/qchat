@@ -3,8 +3,8 @@
 /**
 * Module dependencies.
 */
-var config = require('../config'),
-mongoose = require('mongoose');
+let config = require('../config');
+let mongoose = require('mongoose');
 
 // mpromise (mongoose's default promise library) is deprecated,
 // Plug-in your own promise library instead.
@@ -15,7 +15,7 @@ mongoose.Promise = require('bluebird');
 module.exports.connect = function (cb) {
   var _this = this;
 
-  var db = mongoose.connect(config.db.uri, config.db.options, function (err) {
+  let db = mongoose.connect(config.db.uri, config.db.options, function (err) {
     // Log Error
     if (err) {
       console.error('Could not connect to MongoDB!');
