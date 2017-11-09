@@ -6,9 +6,9 @@ const http = require('http');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const socketio = require('socket.io');
+const logger 	= require('./logger');
 let session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
-
 // Socket.io configuration
 module.exports = function (app, db) {
   let server = http.createServer(app);
@@ -28,7 +28,10 @@ module.exports = function (app, db) {
       // Get the session id from the request cookies
       let sessionId = socket.request.signedCookies ? socket.request.signedCookies[config.sessionKey] : undefined;
 
-      if (!sessionId) return next(new Error('sessionId was not found in socket.request'), false);
+      if (!sessionId) {
+        logger.info('Reject Someone request Socket IO without logged');
+        return next(new Error('sessionId was not found in socket.request'), false);
+      }
 
       // Use the mongoStorage instance to get the Express session information
       mongoStore.get(sessionId, function (err, session) {
@@ -54,7 +57,12 @@ module.exports = function (app, db) {
 
   // Add an event listener to the 'connection' event
   io.on('connection', function (socket) {
-    require('../../socketio')(io, socket);
+    // Call all socket handlers.
+    require('../../app/socket.io')(io, socket);
+
+    socket.emit('connection', {
+      message: 'OK:: Connected to Socket Server.'
+    });
   });
 
   return server;

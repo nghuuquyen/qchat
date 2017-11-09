@@ -11,3 +11,12 @@
   {{/each}}
 </ul>
 <!-- ./ List author -->
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io('http://localhost:7575');
+  socket.on('connection', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
