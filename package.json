@@ -1,0 +1,37 @@
+{
+  "name": "qchat",
+  "version": "1.0.0",
+  "description": "Group realtime chating",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://nghuuquyen@bitbucket.org/nghuuquyen/qchat.git"
+  },
+  "keywords": [
+    "qchat",
+    "sociss",
+    "class",
+    "sociss",
+    "nodejs"
+  ],
+  "author": "Nguyen Huu Quyen",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^2.0.0",
+    "express": "^4.16.2",
+    "express-hbs": "^1.0.4",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.13.1",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
+    "redis": "^2.8.0",
+    "socket.io-redis": "^5.2.0",
+    "winston": "^2.4.0"
+  }
+}
