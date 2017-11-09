@@ -1,27 +1,17 @@
-
-const port = 3000;
-
-app.listen(port, function(err) {
-  if(err) {
-    console.error('Something error !!');
-    console.error(err);
-  }
-
-  console.log('App listen on port ' + port);
-});
-
-
 'use strict';
 
 /**
 * Module dependencies.
 */
-var config = require('../config'),
-mongoose = require('./mongoose'),
-express = require('./express');
+
+// loads environment variables from a .env file into process.env
+const env = require('dotenv').config();
+const config = require('./config');
+const database = require('./database');
+const express = require('./lib/express');
 
 module.exports.init = function init(callback) {
-  mongoose.connect(function (db) {
+  database.connect(function (db) {
     // Initialize express
 
     console.log('Connect Mongo Database Done.');
@@ -35,7 +25,7 @@ module.exports.start = function start(callback) {
 
   _this.init(function (app, db, config) {
     var port = config.port || 3000;
-    // Start the app by listening on <port>
+
     app.listen(port , function () {
       console.log('-------------- QChat Application ---------------');
       console.log('App Starting On Port ' + port);

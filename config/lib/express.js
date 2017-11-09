@@ -11,7 +11,7 @@ module.exports.init = function (db) {
   const app = express();
 
   // Do Registration routes.
-  app.use(require('./app/routes'));
+  app.use(require('../../app/routes'));
 
   // Set static content.
   app.use('/', express.static('./public'));

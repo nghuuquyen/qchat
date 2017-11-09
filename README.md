@@ -1,21 +1,28 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+QChat - Ứng dụng chatting theo nhóm trực tuyến
 
 ### How do I get set up? ###
 
-* Summary of set up
 * Configuration
+
+Tạo mới file `.env` và thiết lập thông số trong file `.env` như mẫu `.env.example`
+
 * Dependencies
+
+chạy lệnh `npm install`
+
 * Database configuration
+
+Thiết lập kết nối database trong file `.env`
+
 * How to run tests
+
+Chạy lệnh `npm test`
 * Deployment instructions
+
+
+Chạy lệnh `grunt build` để đóng gói và build ứng dụng.
 
 ### Contribution guidelines ###
 

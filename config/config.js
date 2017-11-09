@@ -12,7 +12,7 @@ var initGlobalConfig = function () {
   }
 
   // Get the default assets
-  const defaultAssets = require('./assets/default'));
+  const defaultAssets = require('./assets/default');
 
   // Get the current assets
   const environmentAssets = require('./assets');
@@ -24,7 +24,7 @@ var initGlobalConfig = function () {
 
   // Get the current config
   const environmentConfig = require('./env');
-  
+
   // Merge config files
   let config = _.merge(defaultConfig, environmentConfig);
 

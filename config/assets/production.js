@@ -8,8 +8,12 @@
 module.exports = {
   client: {
     lib: {
-      css: [],
-      js: [],
+      css: [
+        "public/dist/vendor.min.css"
+      ],
+      js: [
+        "public/dist/vendor.min.js"
+      ]
       tests: []
     },
     css: [

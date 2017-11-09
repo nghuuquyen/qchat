@@ -3,34 +3,28 @@
 module.exports = {
   db: {
     // mongodb://[username:password@]host1[:port1]
-    uri: 'mongodb://127.0.0.1:27017/qchat-dev-db',
-    username: process.env.dbUsername,
-    password: process.env.dbPassword,
-    host: process.env.dbHost,
-    port: process.env.dbPort,
-    name: process.env.dbName,
+    uri: process.env.MONGO_URI,
     options: {
       useMongoClient: true
     },
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
   },
-  sessionSecret: "5901267121262132123123954asd671631",
   facebook: {
-    clientID: process.env.facebookClientID,
-    clientSecret: process.env.facebookClientSecret,
+    clientID: process.env.FACEBOOK_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: "/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos']
   },
   twitter:{
-    consumerKey: process.env.twitterConsumerKey,
-    consumerSecret: process.env.twitterConsumerSecret,
+    consumerKey: process.env.TWITTER_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
     callbackURL: "/auth/twitter/callback",
     profileFields: ['id', 'displayName', 'photos']
   },
   redis: {
-    host: "127.0.0.1",
-    port: 6379,
-    password: ""
+    host: process.env.REDIS_HOSTNAME,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD
   }
 };
