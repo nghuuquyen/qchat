@@ -1,10 +1,4 @@
-/**
-* @author Quyen Nguyen Huu
-* @module routes
-* @description
-* Active all routes of application and simple handle error.
-*/
-"user strict";
+"use strict";
 
 let router = require('express').Router();
 let NotFoundError = require('../errors/NotFoundError');

@@ -1,9 +1,9 @@
+"use strict";
 /**
 * @author Quyen Nguyen Huu
 * @module models
 * @name   author.server.model
 */
-"user strict";
 
 let NotFoundError = require('../errors/NotFoundError');
 let authors = [
@@ -47,7 +47,7 @@ function getAll() {
 */
 function findOne(_id) {
   return new Promise(( resolve, reject ) => {
-    for(i in authors) {
+    for(let i in authors) {
       if(authors[i].id === _id || authors[i].username === _id) {
         return resolve(authors[i]);
       }

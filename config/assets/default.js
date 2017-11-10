@@ -28,5 +28,10 @@ module.exports = {
     ],
     views: ['client/modules/*/views/**/*.html'],
     templates: ['build/templates.js']
+  },
+  server: {
+    gruntConfig: 'Gruntfile.js',
+    allJS: ['server.js', 'config/**/*.js', 'app/**/*.js'],
+    views: 'app/views/*.html'
   }
 };

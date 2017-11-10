@@ -6,6 +6,6 @@ var init = function () {
 	}
 
 	return require('./development');
-}
+};
 
 module.exports = init();

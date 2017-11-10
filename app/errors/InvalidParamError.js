@@ -6,4 +6,4 @@ class InvalidParamError extends BaseError {
   }
 }
 
-module.exports = NotFoundError;
+module.exports = InvalidParamError;

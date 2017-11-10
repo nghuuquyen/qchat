@@ -13,7 +13,7 @@ module.exports = {
       ],
       js: [
         "public/dist/vendor.min.js"
-      ]
+      ],
       tests: []
     }
   }

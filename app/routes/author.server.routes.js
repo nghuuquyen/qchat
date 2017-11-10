@@ -1,9 +1,9 @@
+"user strict";
 /**
 * @author Quyen Nguyen Huu
 * @module routes
 * @name   author.server.routes
 */
-"user strict";
 
 let router = require('express').Router();
 let AuthorCtrl = require('../controllers').Author;

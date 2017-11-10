@@ -1,9 +1,8 @@
-/**
-* @author Quyen Nguyen Huu
-* @module models
-* @name   post.server.model
-*/
-"user strict";
+"use strict";
+
+module.exports = {
+  findPostsByAuthor : findPostsByAuthor
+};
 
 let posts = [
   {
@@ -24,9 +23,6 @@ let posts = [
   },
 ];
 
-module.exports = {
-  findPostsByAuthor : findPostsByAuthor
-};
 
 /**
 * @name findPostsByAuthor

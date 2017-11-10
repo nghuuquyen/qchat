@@ -12,4 +12,4 @@ var RoomSchema = new Mongoose.Schema({
   connections: { type: [{ userId: String, socketId: String }]}
 });
 
-module.exports = Mongoose.model('Room', RoomSchema);;
+module.exports = Mongoose.model('Room', RoomSchema);

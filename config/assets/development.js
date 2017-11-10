@@ -8,15 +8,9 @@
 module.exports = {
   client: {
     lib: {
-      css: [
-
-      ],
-      js: [
-
-      ],
-      tests: [
-        
-      ]
+      css: [],
+      js: [],
+      tests: []
     }
   }
 };

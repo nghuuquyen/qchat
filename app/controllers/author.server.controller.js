@@ -1,9 +1,9 @@
+"use strict";
 /**
 * @author Nguyen Huu Quyen
 * @module controller
 * @name author.server.controller
 */
-"use strict";
 
 let Services = require('../services');
 let AuthorService = Services.Author;

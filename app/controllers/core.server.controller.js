@@ -1,9 +1,4 @@
-/**
-* @author Quyen Nguyen Huu
-* @module controllers
-* @name   core.server.controller
-*/
-"user strict";
+"use strict";
 
 let AuthorService = require('../services').Author;
 

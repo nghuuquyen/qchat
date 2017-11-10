@@ -8,14 +8,11 @@ const logDirs = ['logs', 'logs/error', 'logs/info', 'logs/exceptions'];
 
 // Just to create logs folders if not exits.
 for(var i = 0 ; i < logDirs.length; i++) {
-  (function(index) {
-    if ( !fs.existsSync(logDirs[index])) {
-      // Create the directory if it does not exist
-      fs.mkdirSync(logDirs[index]);
-    }
-  })(i);
+  if ( !fs.existsSync(logDirs[i])) {
+    // Create the directory if it does not exist
+    fs.mkdirSync(logDirs[i]);
+  }
 }
-
 
 function getCurrentTime() {
   return moment().format("DD-MM-YYYY, HH:mm:ss A");
