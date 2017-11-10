@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-cloak>
+<head>
+  {{{block "pageMeta"}}}
+  {{{block "pageStyles"}}}
+</head>
+
+<body>
+  <div class="wrapper">
+    {{{body}}}
+  </div>
+
+  {{#block 'footer'}}
+  <footer>
+    {{> 'default-footer.server.view'}}
+  </footer>
+  {{/block}}
+
+  {{{block 'pageScripts'}}}
+</body>
+</html>

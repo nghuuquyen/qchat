@@ -1,0 +1,23 @@
+{{!< html-struct}}
+
+{{#contentFor 'pageMeta'}}
+{{> 'default-meta.server.view'}}
+{{/contentFor}}
+
+{{#contentFor 'pageStyles'}}
+{{> 'default-styles.server.view'}}
+{{/contentFor}}
+
+{{#contentFor 'pageScripts'}}
+{{> 'default-scripts.server.view'}}
+{{/contentFor}}
+
+<header>
+  <div ng-include="'modules/core/client/views/header.client.view.html'"></div>
+</header>
+
+<!--  Main Content -->
+<section ui-view>
+  {{{body}}}
+</section>
+<!-- ./ Main Content -->
