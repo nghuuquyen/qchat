@@ -1,5 +1,6 @@
 "use strict";
 const hbs = require('express-hbs');
+const path = require('path');
 
 /**
 * @name initViewEngine
@@ -25,7 +26,13 @@ function initViewEngine(app, db) {
   app.set('view engine', 'server.view.html');
 
   // Set views folder
-  app.set('views', './app/views');
+  app.set('views', path.resolve('./app/views'));
+
+  /*
+  * -----------------------
+  * --- Register Helper ---
+  * -----------------------
+  */
 
   hbs.registerHelper('json', function(obj) {
     return new hbs.SafeString(JSON.stringify(obj));
