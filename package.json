@@ -29,6 +29,7 @@
     "express": "^4.16.2",
     "express-hbs": "^1.0.4",
     "express-session": "^1.15.6",
+    "glob": "^7.1.2",
     "helmet": "^3.9.0",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
