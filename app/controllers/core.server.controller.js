@@ -1,7 +1,5 @@
 "use strict";
 
-let AuthorService = require('../services').Author;
-
 module.exports = {
   renderHomePage : renderHomePage
 };
@@ -9,17 +7,12 @@ module.exports = {
 /**
 * @name renderHomePage
 * @description
-* Do get all authors and render homepage.
+* Do render homepage.
 *
 * @param  {object}   req  HTTP Request
 * @param  {object}   res  HTTP Response
 * @param  {Function} next Next middleware
 */
 function renderHomePage(req, res, next) {
-  AuthorService.getAllAuthors().then(_authors => {
-    res.render('home', {
-      authors : _authors
-    });
-  })
-  .catch(err => next(err));
+  res.render('home', {});
 }
