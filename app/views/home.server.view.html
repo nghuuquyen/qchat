@@ -1,16 +1,12 @@
-<h1>Home Page</h1>
-
-<b>Authors</b>
-</hr>
-<!-- List author -->
-<ul>
-  {{#each authors}}
-  <li>
-    <a href="/author/{{this.username}}">{{this.fullName}}</a>
-  </li>
-  {{/each}}
-</ul>
-<!-- ./ List author -->
+<div class="container">
+  <div class="row">
+    <div class="jumbotron">
+      <h1>Wellcome to Qchat!</h1>
+      <p>Chatting with your friend anywhere.</p>
+      <p><a class="btn btn-primary btn-lg" href="#" role="button">Try now</a></p>
+    </div>
+  </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>

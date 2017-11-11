@@ -11,6 +11,8 @@ module.exports = {
       css: [],
       js: [],
       tests: []
-    }
+    },
+    css : [],
+    js : []
   }
 };

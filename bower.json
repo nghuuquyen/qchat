@@ -1,0 +1,24 @@
+{
+  "name": "qchat",
+  "description": "Group realtime chatting",
+  "main": "server.js",
+  "authors": [
+    "Nguyen Huu Quyen"
+  ],
+  "license": "Private",
+  "keywords": [
+    "qchat",
+    "sociss",
+    "class",
+    "sociss",
+    "nodejs"
+  ],
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "angular": "1.6.6",
+    "angular-ui-router": "^1.0.10",
+    "angular-resource": "^1.6.6",
+    "bootstrap": "^3.3.7"
+  }
+}
