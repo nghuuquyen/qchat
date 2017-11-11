@@ -21,12 +21,6 @@ function initStaticContentRoutes(app) {
 
   var _staticFolderRoot = './';
 
-  // On production we will build and minify all assets. Therefore we
-  // change static content folders.
-  if(process.env.NODE_ENV === 'production') {
-    _staticFolderRoot = './public/dist/www/';
-  }
-
   // Globbing static routing for client assets.
   config.folders.client.forEach(function (staticPath) {
     // Express route need '/' at first.

@@ -108,7 +108,13 @@ function initGlobalConfig() {
   const environmentConfig = require('./env');
 
   // Merge assets files
-  const assets = _.merge({} , defaultAssets, environmentAssets);
+  let assets = _.merge(defaultAssets, environmentAssets);
+
+  if(process.env.NODE_ENV === 'production') {
+    // On production don't need merge defaut assets.
+    // Becase default assets already compile to minify versions.
+    assets = environmentAssets;
+  }
 
   // Merge config files
   let config = _.merge(defaultConfig, environmentConfig);

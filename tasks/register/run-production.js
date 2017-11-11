@@ -1,3 +1,3 @@
 module.exports = function (grunt) {
-    grunt.registerTask('run-production', ["env:production", 'build-production' , 'concurrent:build']);
+    grunt.registerTask('run-prod', ["env:production", 'build' , 'concurrent:build']);
 };
