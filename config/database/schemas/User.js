@@ -2,6 +2,7 @@
 
 const Mongoose 	= require('mongoose');
 const crypto = require('crypto');
+const hsPassword = require('../helpers/HashSaltPassword');
 const DEFAULT_USER_PICTURE = "/assets/images/default-user-avatar.jpg";
 
 /**
@@ -43,7 +44,11 @@ var UserSchema = new Mongoose.Schema({
     type: String,
     index: {
       unique: true,
-      sparse: true // For this to work on a previously indexed field, the index must be dropped & the application restarted.
+      /**
+      * For this to work on a previously indexed field,
+      * the index must be dropped & the application restarted.
+      */
+      sparse: true
     },
     lowercase: true,
     trim: true,
@@ -82,10 +87,10 @@ var UserSchema = new Mongoose.Schema({
     default: ['user'],
     required: 'Please provide at least one role'
   },
-  updated: {
+  updatedAt: {
     type: Date
   },
-  created: {
+  createdAt: {
     type: Date,
     default: Date.now
   },
@@ -106,8 +111,10 @@ var UserSchema = new Mongoose.Schema({
 */
 UserSchema.pre('save', function (next) {
   if (this.password && this.isModified('password')) {
-    this.salt = crypto.randomBytes(16).toString('base64');
-    this.password = this.hashPassword(this.password);
+    const passwordData = hsPassword.saltHashPassword(this.password);
+
+    this.salt = passwordData.salt;
+    this.password = passwordData.hash;
   }
 
   next();
@@ -119,10 +126,7 @@ UserSchema.pre('save', function (next) {
 */
 UserSchema.methods.hashPassword = function (password) {
   if (this.salt && password) {
-    var hash = crypto.createHmac('sha512', this.salt);
-    hash.update(password);
-
-    return hash.digest('hex');
+    return hsPassword.hashPassword(password, this.salt);
   } else {
     return password;
   }

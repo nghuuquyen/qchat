@@ -56,7 +56,7 @@ function setCustomCacheControl(res, path) {
 * @description
 *
 * Initialize local variables for express application,
-* after that we can get config value from environment.
+* after that we can get config value from environment on HTML view.
 *
 * @param  {object} app express instance
 */
@@ -87,6 +87,13 @@ function initLocalVariables(app) {
   });
 }
 
+/**
+* @name initRouteErrorHandle
+* @description
+* Get errors and show to view page.
+*
+* @param  {object} app express instance
+*/
 function initRouteErrorHandle(app) {
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
@@ -108,7 +115,7 @@ function initRouteErrorHandle(app) {
 
 /**
 * Initialize the Express application
-* [NOTICE] Please keep corect order of all steps below.
+* [NOTICE] Please keep correct order of all steps below.
 */
 module.exports.init = function (db) {
   let app = express();
@@ -130,11 +137,11 @@ module.exports.init = function (db) {
 
   // 6. Setup passport for authentication.
   require('./passport')(app, db);
-  
+
   // 7. Setup server routes, after session for binding user information.
   app.use(require('../../app/routes'));
 
-  // 8. Config CORS headers.
+  // 8. Config CORS headers for security.
   require('./cors')(app, db);
 
   // 9. Initial route errors handler.

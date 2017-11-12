@@ -1,16 +1,30 @@
 'use strict';
 
-var Mongoose  = require('mongoose');
+const Mongoose  = require('mongoose');
+const Schema = Mongoose.Schema;
 
-/**
-* Each connection object represents a user connected through a unique socket.
-* Each connection object composed of {userId + socketId}. Both of them together are unique.
-*
-*/
 var ChatMessageSchema = new Mongoose.Schema({
-  content: { type: String, required: true },
-  author: { type: String, required: true },
-  slug: { type: String, required: true }
+  content: {
+    type: String,
+    required: 'Chat message can not empty'
+  },
+  room : {
+    type : Schema.Types.ObjectId,
+    required : 'Room not allow empty',
+    ref : 'Room'
+  },
+  author : {
+    type : Schema.Types.ObjectId,
+    required : 'Author not allow empty',
+    ref : 'User'
+  },
+  updatedAt: {
+    type: Date
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
-module.exports = Mongoose.model('ChatMessage', ChatMessageSchema);
+module.exports = Mongoose.model('ChatMessage', ChatMessageSchema, 'chat_messages');
