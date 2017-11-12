@@ -10,6 +10,14 @@ module.exports = {
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
   },
+  secure : {
+    /*
+    * If turn to true, please make sure you on SSL connection.
+    * If not you will lost cookie because on in secure mode, cookie only
+    * send on HTTPs connection.
+    */
+    ssl : process.env.SSL_MODE || false
+  },
   sessionSecret: process.env.SESSION_SECRET,
   facebook: {
     clientID: process.env.FACEBOOK_CLIENT_ID,

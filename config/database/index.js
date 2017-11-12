@@ -3,8 +3,21 @@
 /**
 * Module dependencies.
 */
-let config = require('../config');
-let mongoose = require('mongoose');
+const config = require('../config');
+const mongoose = require('mongoose');
+const logger = require('../lib/logger');
+
+/**
+* @name initDatabaseSchemas
+* @description
+* Do initial all database schemas.
+*/
+function initDatabaseSchemas() {
+  logger.info('Do initial database schemas');
+  require('./schemas/ChatMessage');
+  require('./schemas/Room');
+  require('./schemas/User');
+}
 
 // mpromise (mongoose's default promise library) is deprecated,
 // Plug-in your own promise library instead.
@@ -14,15 +27,19 @@ mongoose.Promise = require('bluebird');
 // Initialize Mongoose
 module.exports.connect = function (cb) {
   var _this = this;
+  logger.info('Trying to connect database');
 
   let db = mongoose.connect(config.db.uri, config.db.options, function (err) {
     // Log Error
     if (err) {
-      console.error('Could not connect to MongoDB!');
-      console.log(err);
+      logger.error('Could not connect to MongoDB!');
+      logger.error(err);
     } else {
       // Enabling mongoose debug mode if required
       mongoose.set('debug', config.db.debug);
+
+      // After connect database completed, do initial database schemas.
+      initDatabaseSchemas();
 
       // Call callback FN
       if (cb) cb(db);
@@ -32,7 +49,7 @@ module.exports.connect = function (cb) {
 
 module.exports.disconnect = function (cb) {
   mongoose.disconnect(function (err) {
-    console.info('Disconnected from MongoDB.');
+    logger.info('Disconnected from MongoDB.');
     cb(err);
   });
 };

@@ -14,5 +14,7 @@ module.exports = {
 * @param  {Function} next Next middleware
 */
 function renderHomePage(req, res, next) {
-  res.render('home', {});
+  res.render('home', {
+    user : req.user
+  });
 }

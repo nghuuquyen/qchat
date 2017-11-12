@@ -22,7 +22,12 @@ function initSession(app, db) {
     cookie: {
       maxAge: config.sessionCookie.maxAge,
       httpOnly: config.sessionCookie.httpOnly,
-      secure: config.sessionCookie.secure
+      /**
+      * If you have cookie.secure set to true and you're NOT using SSL
+      * (i.e. https protocol) then the cookie with the session id
+      * is not returned to the browser and everything fails silently.
+      */
+      secure: config.sessionCookie.secure && config.secure.ssl
     },
     name: config.sessionKey,
     store: new MongoStore({
@@ -30,10 +35,6 @@ function initSession(app, db) {
       mongooseConnection : db
     })
   }));
-
-  // Passport's middleware.
-  app.use(passport.initialize());
-  app.use(passport.session());
 }
 
 module.exports = initSession;

@@ -128,16 +128,19 @@ module.exports.init = function (db) {
   // 5. Setup express and passport sessions.
   require('./session')(app, db);
 
-  // 6. Setup server routes, after session for binding user information.
+  // 6. Setup passport for authentication.
+  require('./passport')(app, db);
+  
+  // 7. Setup server routes, after session for binding user information.
   app.use(require('../../app/routes'));
 
-  // 7. Config CORS headers.
+  // 8. Config CORS headers.
   require('./cors')(app, db);
 
-  // 8. Initial route errors handler.
+  // 9. Initial route errors handler.
   initRouteErrorHandle(app);
 
-  // 9. Configure Socket.io
+  // 10. Configure Socket.io
   app = require('./socket.io')(app, db);
 
   return app;
