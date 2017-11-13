@@ -12,8 +12,14 @@
 {{> 'default-scripts.server.view'}}
 {{/contentFor}}
 
-<!--  Main Content -->
-<section ui-view>
+<header>
+  {{> 'default-header.server.view'}}
+</header>
+
+<main ui-view>
   {{{body}}}
-</section>
-<!-- ./ Main Content -->
+</main>
+
+<footer>
+  {{> 'default-footer.server.view'}}
+</footer>

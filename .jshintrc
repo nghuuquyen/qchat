@@ -18,7 +18,8 @@
     "ApplicationConfiguration": false,
     "AWS" : false,
     "Prism" : true,
-    "moment" : true
+    "moment" : true,
+    "$": true
   },
   "predef": [ // Extra globals.
     "inject",

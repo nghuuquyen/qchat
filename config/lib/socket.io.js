@@ -9,6 +9,7 @@ const socketio = require('socket.io');
 const logger 	= require('./logger');
 let session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
+
 // Socket.io configuration
 module.exports = function (app, db) {
   let server = http.createServer(app);

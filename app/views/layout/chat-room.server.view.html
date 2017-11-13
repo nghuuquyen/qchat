@@ -1,0 +1,31 @@
+{{!< html-struct}}
+
+{{#contentFor 'pageMeta'}}
+{{> 'default-meta.server.view'}}
+{{/contentFor}}
+
+{{#contentFor 'pageStyles'}}
+{{> 'default-styles.server.view'}}
+{{/contentFor}}
+
+{{#contentFor 'pageScripts'}}
+{{> 'default-scripts.server.view'}}
+{{/contentFor}}
+
+<!-- sidebar -->
+<div id="sidebar">
+  {{> 'default-sidebar.server.view'}}
+</div>
+<!-- ./ sidebar -->
+
+<!--  page content -->
+<div id="content">
+  <header>
+    {{> 'default-header.server.view'}}
+  </header>
+
+  <main ui-view>
+    {{{body}}}
+  </main>
+</div>
+<!-- ./ page content -->

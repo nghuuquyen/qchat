@@ -33,6 +33,7 @@ module.exports = {
     js: [
       'client/modules/core/app/config.js',
       'client/modules/core/app/init.js',
+      'public/assets/js/theme.js',
       'client/modules/*/*.js',
       'client/modules/*/**/*.js'
     ],

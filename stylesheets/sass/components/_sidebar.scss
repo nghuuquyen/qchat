@@ -1,0 +1,75 @@
+#sidebar {
+  width: 250px;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  height: 100vh;
+  z-index: 999;
+  background: #7386D5;
+  color: #fff;
+  transition: all 0.3s;
+
+  &.active {
+    margin-left: -250px;
+  }
+
+  .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+  }
+
+  ul.components .room-items {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  ul p {
+    color: #fff;
+    padding: 10px;
+  }
+
+  ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+  }
+  ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+  }
+
+  ul li.active > a, a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+    font-weight: 600;
+  }
+
+  a[data-toggle="collapse"] {
+    position: relative;
+  }
+
+  a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
+    content: '\e259';
+    display: block;
+    position: absolute;
+    right: 20px;
+    font-family: 'Glyphicons Halflings';
+    font-size: 0.6em;
+  }
+
+  a[aria-expanded="true"]::before {
+    content: '\e260';
+  }
+
+  ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
+  }
+
+  a.article, a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+  }
+}
