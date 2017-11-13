@@ -107,6 +107,7 @@ function initRouteErrorHandle(app) {
     const _status = err.status || 500;
     res.status(_status);
     res.render('error', {
+      user : req.user,
       message: err.message,
       status : _status
     });

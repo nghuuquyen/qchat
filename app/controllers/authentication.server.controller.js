@@ -11,9 +11,16 @@ const logger = require('../../config/lib/logger');
 
 const VIEWS = {
   SIGNIN_PAGE : 'pages/user/signin',
-  SIGNUP_PAGE : 'pages/user/signup',
-  CHAT_ROOMS  : 'pages/chat/rooms'
+  SIGNUP_PAGE : 'pages/user/signup'
 };
+
+/**
+* URL will send user to after logged completed. You should define it
+* on core.server.controller.js
+*
+* @type {String}
+*/
+const REDIRECT_URL_AFTER_LOGGED = '/home';
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = [
@@ -73,14 +80,12 @@ function signup(req, res) {
       req.login(user, function (err) {
         if (err) {
           logger.error(err);
-          res.status(400).render(VIEWS.SIGNUP_PAGE, {
+          return res.status(400).render(VIEWS.SIGNUP_PAGE, {
             message: err.message
           });
-        } else {
-          res.render(VIEWS.CHAT_ROOMS, {
-            user : user
-          });
         }
+
+        res.redirect(REDIRECT_URL_AFTER_LOGGED);
       });
     }
   });
@@ -107,14 +112,12 @@ function signin(req, res, next) {
       req.login(user, function (err) {
         if (err) {
           logger.error(err);
-          res.status(400).render(VIEWS.SIGNIN_PAGE, {
+          return res.status(400).render(VIEWS.SIGNIN_PAGE, {
             message: err.message
           });
-        } else {
-          res.render(VIEWS.CHAT_ROOMS, {
-            user : user
-          });
         }
+
+        res.redirect(REDIRECT_URL_AFTER_LOGGED);
       });
     }
   })(req, res, next);

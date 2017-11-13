@@ -46,7 +46,7 @@ function sha512(password, salt) {
 * @description
 * Do sha512 password hash.
 * @param  {string} userpassword User password string
-* @return {object} object with two properties. {salt} and  {passwordHash}
+* @return {object} object with two properties. {salt} and  {hash}
 */
 function saltHashPassword(userpassword) {
   var salt = genRandomString(16);
@@ -65,5 +65,5 @@ function saltHashPassword(userpassword) {
 * @return {string}          password after hash with salt string
 */
 function hashPassword(password, salt) {
-  return sha512(password, salt).passwordHash;
+  return sha512(password, salt).hash;
 }
