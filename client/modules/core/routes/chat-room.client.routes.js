@@ -15,7 +15,7 @@
     var _baseUrl = 'client/modules/core/views';
 
     $stateProvider.state('chat', {
-      url: '/chat'
+      url: '/room'
     })
     .state('chat.room', {
       url: '/{roomCode}',

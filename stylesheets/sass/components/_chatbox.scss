@@ -1,0 +1,25 @@
+.chatbox {
+  .chat-content {
+    height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .media {
+    border-bottom: 1px solid #EEE;
+    margin-bottom: 15px;
+  }
+
+  .media-left img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 5px solid #EEE;
+  }
+
+  .media-body .media-heading {
+    font-size: 20px;
+    font-weight: bold;
+    color: #3F51B5;
+  }
+}
