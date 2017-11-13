@@ -4,12 +4,14 @@ const Mongoose = require('mongoose');
 const Room = Mongoose.model('Room');
 const User = Mongoose.model('User');
 const ChatMessage = Mongoose.model('ChatMessage');
+const UserRoom = Mongoose.model('UserRoom');
 const RamdomString = require('../helpers/RamdomString');
 
 function doSeeds() {
   new Room();
   new User();
   new ChatMessage();
+  new UserRoom();
 
   User.findOne({ username : 'nghuuquyen' }).then(user => {
     let room = new Room({

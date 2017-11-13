@@ -17,6 +17,7 @@ function initDatabaseSchemas() {
   require('./schemas/ChatMessage');
   require('./schemas/Room');
   require('./schemas/User');
+  require('./schemas/UserRoom');
 }
 
 // mpromise (mongoose's default promise library) is deprecated,

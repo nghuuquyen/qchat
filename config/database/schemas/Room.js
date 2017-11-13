@@ -37,16 +37,6 @@ var RoomSchema = new Schema({
     required : 'Author is required',
     ref: 'User'
   },
-  joinedUsers : [{
-    type: Schema.Types.ObjectId,
-    ref : 'User',
-    default : []
-  }],
-  pendingUsers : [{
-    type: Schema.Types.ObjectId,
-    ref : 'User',
-    default : []
-  }],
   connections: [{
     userId: String,
     socketId: String,
@@ -58,6 +48,14 @@ var RoomSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  }
+}, {
+  toJSON : {
+    transform: function (doc, ret) {
+      // For security problem.
+      delete ret.password;
+      delete ret.salt;
+    }
   }
 });
 
@@ -95,7 +93,7 @@ RoomSchema.methods.hashPassword = function (password) {
 * Create instance method for authenticating user
 */
 RoomSchema.methods.authenticate = function (password) {
-  return this.passsword === this.hashPassword(password);
+  return this.password === this.hashPassword(password);
 };
 
 module.exports = Mongoose.model('Room', RoomSchema);

@@ -4,6 +4,7 @@ const config = require('../config');
 const express = require('express');
 const path = require('path');
 const NotFoundError = require('../../app/errors/NotFoundError');
+const logger = require('./logger');
 
 /**
 * @name initStaticContentRoutes
@@ -104,8 +105,16 @@ function initRouteErrorHandle(app) {
 
   // Error handle
   app.use(function(err, req, res, next) {
+    // Must logging error.
+    logger.error(err);
+
     const _status = err.status || 500;
     res.status(_status);
+
+    if(err.isPublic) {
+      return res.json(err);
+    }
+    
     res.render('error', {
       user : req.user,
       message: err.message,

@@ -101,6 +101,14 @@ var UserSchema = new Mongoose.Schema({
   resetPasswordExpires: {
     type: Date
   }
+}, {
+  toJSON : {
+    transform: function (doc, ret) {
+      // For security problem.
+      delete ret.password;
+      delete ret.salt;
+    }
+  }
 });
 
 

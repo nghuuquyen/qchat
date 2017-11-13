@@ -3,20 +3,21 @@
 const Mongoose  = require('mongoose');
 const Schema = Mongoose.Schema;
 
-var ChatMessageSchema = new Mongoose.Schema({
-  content: {
-    type: String,
-    required: 'Chat message can not empty'
-  },
+var UserRoomSchema = new Mongoose.Schema({
   room : {
     type : Schema.Types.ObjectId,
     required : 'Room not allow empty',
     ref : 'Room'
   },
-  author : {
+  user : {
     type : Schema.Types.ObjectId,
     required : 'Author not allow empty',
     ref : 'User'
+  },
+  // JOINED, PENDING, BLOCKED
+  status : {
+    type: String,
+    required : 'Status not allow empty'
   },
   updatedAt: {
     type: Date
@@ -27,4 +28,4 @@ var ChatMessageSchema = new Mongoose.Schema({
   }
 });
 
-module.exports = Mongoose.model('ChatMessage', ChatMessageSchema, 'chat_messages');
+module.exports = Mongoose.model('UserRoom', UserRoomSchema, 'user_rooms');
