@@ -24,4 +24,7 @@ router.route('/api/secure/room/:roomCode')
 .get(Ctrl.getRoomData)
 .post(Ctrl.joinRoom);
 
+router.route('/api/secure/room/:roomCode/messages/:page')
+.get(Ctrl.getMessages);
+
 module.exports = router;

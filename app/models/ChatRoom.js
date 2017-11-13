@@ -7,14 +7,19 @@ const ChatMessage = Mongoose.model('ChatMessage');
 const User = Mongoose.model('User');
 const ApiError = require('../errors/ApiError');
 
+const LIMIT_LOAD_MESSAGES = 50;
+
 /**
 * @todo Imlpement methods removeUser
 * @todo Imlpement methods acceptUser
+* @todo Imlpement methods requestJoinRoom
 */
 module.exports = {
   getRoomByCode : getRoomByCode,
   getRoomData : getRoomData,
-  joinRoom : joinRoom
+  joinRoom : joinRoom,
+  getMessages : getMessages,
+  ensureUserJoinRoom : ensureUserJoinRoom
 };
 
 /**
@@ -50,16 +55,12 @@ function getRoomData(user, roomCode) {
 
   return getRoomByCode(roomCode)
   .then(room => {
-    selectedRoom = room;
-    return checkIsJoined(user, room);
+    return ensureUserJoinRoom(user, room);
   })
-  .then(isJoined => {
-    if(isJoined) {
-      // Cover from mongoose object to normal JS object.
-      // If not, we can not change object properties.
-      return selectedRoom.toObject();
-    }
-    throw new ApiError('User not joined this room');
+  .then(room => {
+    // Cover from mongoose object to normal JS object.
+    // If not, we can not change object properties.
+    return room.toObject();
   })
   .then(populateRoomUsers)
   .then(populateRoomChatMessages)
@@ -69,6 +70,14 @@ function getRoomData(user, roomCode) {
     delete room.salt;
 
     return room;
+  });
+}
+
+function ensureUserJoinRoom(user, room) {
+  return checkIsJoined(user, room).then(isJoined => {
+    if(isJoined) return room;
+
+    throw new ApiError('User not joined this room');
   });
 }
 
@@ -101,10 +110,35 @@ function populateRoomUsers(room) {
 }
 
 function populateRoomChatMessages(room) {
-  return ChatMessage.find({ room : room }).then(docs => {
+  return ChatMessage.find({ room : room })
+  .limit(LIMIT_LOAD_MESSAGES)
+  .sort({ createdAt: -1 })
+  .then(docs => {
     room.messages = docs;
 
     return room;
+  });
+}
+
+/**
+* @name getMessages
+* @description
+* Get message by page number, default page number is 0.
+*
+* @param  {string} roomCode       Room code.
+* @param  {Number} [pageNumber=0] Page number for calculate skip.
+* @return {promise.<array>}       Messages
+*/
+function getMessages(roomCode, pageNumber = 0) {
+  return getRoomByCode(roomCode)
+  .then(room => {
+    return ChatMessage.find({ room : room })
+    .limit(LIMIT_LOAD_MESSAGES)
+    .skip(pageNumber * LIMIT_LOAD_MESSAGES)
+    .sort({ createdAt: -1 });
+  })
+  .then(messages => {
+    return messages;
   });
 }
 

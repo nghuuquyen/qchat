@@ -6,7 +6,8 @@ module.exports = {
   renderChatRoomPage : renderChatRoomPage,
   getRoomByCode : getRoomByCode,
   getRoomData : getRoomData,
-  joinRoom : joinRoom
+  joinRoom : joinRoom,
+  getMessages : getMessages
 };
 
 
@@ -68,10 +69,7 @@ function getRoomData(req, res, next) {
   ChatRoom.getRoomData(req.user, roomCode).then(room => {
     res.json(room);
   })
-  .catch(err => {
-    console.log(err);
-    next(err);
-  });
+  .catch(err => next(err));
 }
 
 /**
@@ -98,6 +96,31 @@ function joinRoom(req, res, next) {
 
   ChatRoom.joinRoom(req.user, roomCode, password).then(room => {
     res.json(room);
+  })
+  .catch(err => next(err));
+}
+
+/**
+* @name getMessages
+* @description
+* API used for load more messages.
+*
+* @param  {object}   req  HTTP request
+* @param  {object}   res  HTTP response
+* @param  {function} next Next middleware
+*/
+function getMessages(req, res, next) {
+  let roomCode = req.params.roomCode;
+  let page = req.params.page;
+
+  ChatRoom.getRoomByCode(roomCode).then(room => {
+    return ChatRoom.ensureUserJoinRoom(req.user, room);
+  })
+  .then(room => {
+    return ChatRoom.getMessages(roomCode, page);
+  })
+  .then(messages => {
+    res.json(messages);
   })
   .catch(err => next(err));
 }
