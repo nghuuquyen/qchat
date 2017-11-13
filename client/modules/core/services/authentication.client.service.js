@@ -1,3 +1,7 @@
+/**
+* Created by Quyen Nguyen Huu on 12/11/2017.
+* Email : nghuuquyen@gmail.com
+*/
 'use strict';
 
 // Authentication service for user variables
