@@ -19,7 +19,8 @@ module.exports = {
   getRoomData : getRoomData,
   joinRoom : joinRoom,
   getMessages : getMessages,
-  ensureUserJoinRoom : ensureUserJoinRoom
+  ensureUserJoinRoom : ensureUserJoinRoom,
+  getUserRooms : getUserRooms
 };
 
 /**
@@ -35,6 +36,19 @@ function getRoomByCode(roomCode) {
     if(room) return room;
 
     throw new ApiError('Room not found.');
+  });
+}
+
+function getUserRooms(user) {
+  return UserRoom.find({ user : user })
+  .populate('room').then(docs => {
+    let _rooms = [];
+
+    for(let i in docs) {
+      _rooms.push(docs[i].room);
+    }
+
+    return _rooms;
   });
 }
 
@@ -111,6 +125,7 @@ function populateRoomUsers(room) {
 
 function populateRoomChatMessages(room) {
   return ChatMessage.find({ room : room })
+  .populate('user')
   .limit(LIMIT_LOAD_MESSAGES)
   .sort({ createdAt: -1 })
   .then(docs => {

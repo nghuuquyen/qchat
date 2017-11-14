@@ -4,7 +4,7 @@
 */
 (function() {
   'use strict';
-  
+
   angular
   .module('core')
   .factory('ChatService', Service);
@@ -13,8 +13,47 @@
 
   /* @ngInject */
   function Service($resource) {
-    return {
 
+    function getRoomByCode(code) {
+      return $resource('/api/room/:roomCode', {
+        roomCode : code
+      })
+      .get().$promise;
+    }
+
+    function getRoomData(code) {
+      return $resource('/api/secure/room/:roomCode', {
+        roomCode : code
+      })
+      .get().$promise;
+    }
+
+    function getRoomMessages(code, pageNumber) {
+      return $resource('/api/secure/room/:roomCode/messages/:page', {
+        roomCode : code,
+        page : pageNumber
+      })
+      .query().$promise;
+    }
+
+    function joinRoom(code, password) {
+      return $resource('/api/secure/room/:roomCode', {
+        roomCode : code
+      }).save({
+        password : password
+      }).$promise;
+    }
+
+    function getUserRooms() {
+      return $resource('/api/secure/room').query().$promise;
+    }
+
+    return {
+      getRoomByCode : getRoomByCode,
+      getRoomData : getRoomData,
+      getRoomMessages : getRoomMessages,
+      joinRoom : joinRoom,
+      getUserRooms : getUserRooms
     };
   }
 })();

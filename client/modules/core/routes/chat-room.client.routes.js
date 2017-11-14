@@ -15,17 +15,40 @@
     var _baseUrl = 'client/modules/core/views';
 
     $stateProvider.state('chat', {
-      url: '/room'
+      url: '/u',
+      views : {
+        'sidebar-content@' : {
+          templateUrl: _baseUrl + '/chat.sidebar.client.view.html',
+          controller : 'RoomController',
+          controllerAs : 'vm'
+        }
+      }
     })
     .state('chat.room', {
-      url: '/{roomCode}',
+      url: '/room/{roomCode}',
       views : {
         'chat-room@' : {
           templateUrl: _baseUrl + '/chatbox.client.view.html',
           controller : 'ChatRoomController',
           controllerAs : 'vm'
         }
+      },
+      resolve : {
+        room : getRoomData
       }
     });
+
+    getRoomData.$inject = ['$stateParams','$window','$location','ChatService'];
+
+    function getRoomData($stateParams, $window, $location, ChatService) {
+      return ChatService.getRoomData($stateParams.roomCode)
+      .then(function(room) {
+        return room;
+      })
+      .catch(function() {
+        $location.path('/u');
+        $window.location.reload();
+      });
+    }
   }
 }());

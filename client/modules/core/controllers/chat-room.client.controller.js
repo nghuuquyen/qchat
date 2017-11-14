@@ -9,16 +9,16 @@
   .module('core')
   .controller('ChatRoomController', Controller);
 
-  Controller.$inject = ['$scope', 'Authentication', 'ChatService'];
+  Controller.$inject = ['$scope', 'Authentication', 'ChatService', 'room'];
 
   /* @ngInject */
-  function Controller($scope, Authentication, ChatService) {
+  function Controller($scope, Authentication, ChatService, room) {
     var vm = this;
 
     activate();
 
     function activate() {
-      console.log('ChatRoomController work !!');
+      vm.room = room;
     }
   }
 })();

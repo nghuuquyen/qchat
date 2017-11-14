@@ -7,7 +7,8 @@ module.exports = {
   getRoomByCode : getRoomByCode,
   getRoomData : getRoomData,
   joinRoom : joinRoom,
-  getMessages : getMessages
+  getMessages : getMessages,
+  getUserRooms : getUserRooms
 };
 
 
@@ -38,10 +39,6 @@ function renderChatRoomPage(req, res) {
 function getRoomByCode(req, res, next) {
   let roomCode = req.params.roomCode;
 
-  if(!roomCode) {
-    res.send(new ApiError(400, "'roomCode' is required"));
-  }
-
   ChatRoom.getRoomByCode(roomCode).then(room => {
     res.json(room);
   })
@@ -62,10 +59,6 @@ function getRoomByCode(req, res, next) {
 function getRoomData(req, res, next) {
   let roomCode = req.params.roomCode;
 
-  if(!roomCode) {
-    res.send(new ApiError(400, "'roomCode' is required"));
-  }
-
   ChatRoom.getRoomData(req.user, roomCode).then(room => {
     res.json(room);
   })
@@ -85,10 +78,6 @@ function getRoomData(req, res, next) {
 function joinRoom(req, res, next) {
   let roomCode = req.params.roomCode;
   let password = req.body.password;
-
-  if(!roomCode) {
-    res.send(new ApiError(400, "'roomCode' is required"));
-  }
 
   if(!password) {
     res.send(new ApiError(400, "'password' is required"));
@@ -121,6 +110,22 @@ function getMessages(req, res, next) {
   })
   .then(messages => {
     res.json(messages);
+  })
+  .catch(err => next(err));
+}
+
+/**
+* @name getUserRooms
+* @description
+* Get all joined rooms of current logged user
+*
+* @param  {object}   req  HTTP request
+* @param  {object}   res  HTTP response
+* @param  {function} next Next middleware
+*/
+function getUserRooms(req, res, next) {
+  ChatRoom.getUserRooms(req.user).then(rooms => {
+    res.json(rooms);
   })
   .catch(err => next(err));
 }

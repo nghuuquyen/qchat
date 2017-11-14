@@ -1,0 +1,12 @@
+<ul class="list-unstyled components">
+  <li class="active">
+    <a href="#rooms-menu">
+      Rooms
+    </a>
+    <ul class="list-unstyled blue-scrollbar room-items" id="rooms-menu">
+      <li ng-repeat="room in vm.rooms">
+        <a href="/u/room/{{room.code}}">{{room.name}}</a>
+      </li>
+    </ul>
+  </li>
+</ul>

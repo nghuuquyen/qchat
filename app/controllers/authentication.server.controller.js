@@ -20,7 +20,7 @@ const VIEWS = {
 *
 * @type {String}
 */
-const REDIRECT_URL_AFTER_LOGGED = '/home';
+const REDIRECT_URL_AFTER_LOGGED = '/u';
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = [

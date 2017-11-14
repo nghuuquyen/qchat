@@ -8,7 +8,7 @@ const ChatRoomCtrl = require('../controllers').ChatRoom;
 router.route('/').get(CoreCtrl.renderHomePage);
 
 // Private home page for logged user redirect to
-router.route('/home').get(
+router.route('/u').get(
   CoreCtrl.isAuthenticated,
   ChatRoomCtrl.renderChatRoomPage
 );

@@ -19,7 +19,8 @@
     "AWS" : false,
     "Prism" : true,
     "moment" : true,
-    "$": true
+    "$": true,
+    "axios" : true
   },
   "predef": [ // Extra globals.
     "inject",
