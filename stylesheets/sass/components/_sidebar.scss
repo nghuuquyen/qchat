@@ -5,10 +5,32 @@
   left: 0;
   height: 100vh;
   z-index: 999;
-  background: #7386D5;
+  background: #272d46;
   color: #fff;
   transition: all 0.3s;
 
+  .sidebar-header {
+    padding: 20px;
+    background: #404a75;
+
+
+    .user-card {
+      text-align: center;
+      h3 {
+        font-weight: bold;
+      }
+
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 150px;
+        width: 150px;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+    }
+  }
   p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -27,13 +49,8 @@
     margin-left: -250px;
   }
 
-  .sidebar-header {
-    padding: 20px;
-    background: #6d7fcc;
-  }
-
   ul.components .room-items {
-    max-height: 250px;
+    max-height: 350px;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -55,7 +72,7 @@
 
   ul li.active > a, a[aria-expanded="true"] {
     color: #fff;
-    background: #6d7fcc;
+    background: #455080;
     font-weight: 600;
   }
 
@@ -79,11 +96,11 @@
   ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: #3c456d;
   }
 
   a.article, a.article:hover {
-    background: #6d7fcc !important;
+    background: #4f5a8a !important;
     color: #fff !important;
   }
 }

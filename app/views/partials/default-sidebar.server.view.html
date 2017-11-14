@@ -1,11 +1,15 @@
 <nav>
   <div class="sidebar-header">
     <!-- User data here -->
+    <div class="user-card">
+      <img src="http://via.placeholder.com/150x150" alt="">
+      <h3>@{{user.username}}</h3>
+    </div>
   </div>
 
   <ul class="list-unstyled components">
     <li class="active">
-      <a href="#rooms-menu" data-toggle="collapse" aria-expanded="false">
+      <a href="#rooms-menu">
         Rooms
       </a>
       <ul class="list-unstyled blue-scrollbar room-items" id="rooms-menu">
