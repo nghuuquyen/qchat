@@ -124,10 +124,10 @@ function populateRoomUsers(room) {
 }
 
 function populateRoomChatMessages(room) {
-  return ChatMessage.find({ room : room })
-  .populate('user')
+  return ChatMessage.find({ roomCode : room.code })
+  .populate('author')
   .limit(LIMIT_LOAD_MESSAGES)
-  .sort({ createdAt: -1 })
+  .sort({ createdAt: 1 })
   .then(docs => {
     room.messages = docs;
 
@@ -145,13 +145,11 @@ function populateRoomChatMessages(room) {
 * @return {promise.<array>}       Messages
 */
 function getMessages(roomCode, pageNumber = 0) {
-  return getRoomByCode(roomCode)
-  .then(room => {
-    return ChatMessage.find({ room : room })
-    .limit(LIMIT_LOAD_MESSAGES)
-    .skip(pageNumber * LIMIT_LOAD_MESSAGES)
-    .sort({ createdAt: -1 });
-  })
+  return ChatMessage.find({ roomCode : roomCode })
+  .populate('author')
+  .limit(LIMIT_LOAD_MESSAGES)
+  .skip(pageNumber * LIMIT_LOAD_MESSAGES)
+  .sort({ createdAt: 1 })
   .then(messages => {
     return messages;
   });

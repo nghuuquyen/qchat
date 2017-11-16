@@ -1,6 +1,7 @@
 'use strict';
 const Mongoose = require('mongoose');
 const Room = Mongoose.model('Room');
+const ChatMessage =  Mongoose.model('ChatMessage');
 const logger = require('../../config/lib/logger');
 const _ = require('lodash');
 
@@ -17,11 +18,13 @@ module.exports = function (io) {
     logger.debug(`User ${_user.username} connected for chatting.`);
 
     socket.on('join', data => {
+      // TODO: Must check if user have permission to join room.
       logger.debug(`User ${_user.username} join room.`);
       addUser(socket, data.code);
     });
 
     socket.on('message', data => {
+      // TODO: Must check if user have permission send message to room.
       logger.debug(`User ${_user.username} send message in room ${data.code}`);
       sendMessage(socket, data.code, data.message);
     });
@@ -32,6 +35,24 @@ module.exports = function (io) {
     });
   });
 };
+
+function getUserData(socket) {
+  const _user = _.get(socket, 'request.user');
+  if(!_user) return;
+
+  var _connections = connections.filter(function(item) {
+    return item.user.username === _user.username;
+  });
+
+  return {
+    user : {
+      profileImageURL : _user.profileImageURL,
+      username : _user.username,
+      id : _user.id
+    },
+    connections : _connections
+  };
+}
 
 function getConnectionIndex(code, socketId) {
   return connections.findIndex(item => {
@@ -50,7 +71,8 @@ function addUser(socket, code) {
 
   connections.push({
     code : code,
-    socketId : socket.id
+    socketId : socket.id,
+    user : _user
   });
 
   // Join current socket user to room.
@@ -58,10 +80,7 @@ function addUser(socket, code) {
 
   // Send to members in room.
   socket.broadcast.to(code)
-  .emit('has-new-member', {
-    username : _user.username,
-    id : _user.id
-  });
+  .emit('has-new-member', getUserData(socket));
 }
 
 function removeUser(socket) {
@@ -75,23 +94,29 @@ function removeUser(socket) {
   // Return if not found user.
   if(_index === -1) return;
 
+  const _roomCode = connections[_index].code;
   // Leave user out room.
-  socket.leave(connections[_index].code);
-
-  // Emit event to other member in room.
-  socket.broadcast.to(connections[_index].code)
-  .emit('remove-user', {
-    username : _user.username,
-    id : _user.id
-  });
+  socket.leave(_roomCode);
 
   connections.splice(_index, 1);
+
+  // Emit event to other member in room.
+  socket.broadcast.to(_roomCode).emit('user-logout', getUserData(socket));
 }
 
 function sendMessage(socket, code, message) {
-  connections.forEach(room => {
-    if(room.code === code && room.socketId) {
-      socket.broadcast.to(room.code).emit('message', message);
-    }
+  // Save message to database.
+  const msg = new ChatMessage({
+    content: message.content || '',
+    roomCode : code,
+    author : socket.request.user
+  });
+
+  msg.save().then(message => {
+    // Emit to room members
+    socket.broadcast.to(code).emit('message', {
+      content : message.content,
+      author : _.get(socket, 'request.user')
+    });
   });
 }
