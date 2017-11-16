@@ -16,6 +16,9 @@ module.exports = function (app, db) {
   // Create a new Socket.io server
   let io = socketio.listen(server);
 
+  // Force Socket.io to ONLY use "websockets"; No Long Polling.
+  io.set('transports', ['websocket']);
+
   // Create a MongoDB storage object
   let mongoStore =  new MongoStore({
     secret : config.sessionSecret,
@@ -56,15 +59,8 @@ module.exports = function (app, db) {
     });
   });
 
-  // Add an event listener to the 'connection' event
-  io.on('connection', function (socket) {
-    // Call all socket handlers.
-    require('../../app/socket.io')(io, socket);
-
-    socket.emit('connection', {
-      message: 'OK:: Connected to Socket Server.'
-    });
-  });
+  // Call all socket handlers for binding events.
+  require('../../app/socket.io')(io);
 
   return server;
 };

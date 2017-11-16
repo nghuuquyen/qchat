@@ -12,11 +12,7 @@
 
 <div style="height: 100px;" />
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io('http://localhost:7575');
-  socket.on('connection', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
-</script>
+<form class="" action="/api/secure/room/vW9n8j" method="post">
+  <input type="hidden" name="password" value="123456789">
+  <button type="submit" name="button">join</button>
+</form>
