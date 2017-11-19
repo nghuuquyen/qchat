@@ -1,6 +1,8 @@
 "use strict";
 
 const RoomModel = require('../models').Room;
+const RoomConnectionDAO = require('mongoose').model('RoomConnection');
+
 const ApiError = require('../errors/ApiError');
 
 module.exports = {
@@ -12,14 +14,87 @@ module.exports = {
   getUserJoinedRooms : getUserJoinedRooms
 };
 
-function connectUser(userId, roomId) {
-  // add user to current connection list of room
-  // Return new user and current list connections
+/**
+* @name connectUser
+* @description
+* Add user to current connection list of room.
+*
+* @param  {string}  userId    Request user ID.
+* @param  {string}  socketId  Socket ID of connection.
+* @param  {string}  roomId    Room ID or room code.
+* @return {promise.array}  Current connections list.
+*/
+function connectUser(userId, socketId, roomId) {
+  return ensureUserJoinRoom(userId, roomId).then(() => {
+    return RoomConnectionDAO.findOne({
+      user : userId,
+      socketId : socketId
+    });
+  })
+  .then(connection => {
+    if(connection) return connection;
+
+    return RoomModel.getRoomByCodeOrID(roomId).then(room => {
+      const newConnection = new RoomConnectionDAO({
+        user : userId,
+        room : room.id,
+        socketId : socketId
+      });
+
+      return newConnection.save();
+    });
+  })
+  .then(connection => {
+    return getCurrentRoomConnections(connection.room);
+  });
 }
 
-function disconnectUser(userId, roomId) {
-  // Remove user out of current connection list of room
-  // Return removed user and current list connections
+/**
+* @name disconnectUser
+* @description
+* Remove user out of connection list of room.
+*
+* @param  {string}  userId    Request user ID.
+* @param  {string}  socketId  Socket ID of connection.
+* @return {promise.array}  Current connections list.
+*
+*/
+function disconnectUser(userId, socketId) {
+  return RoomConnectionDAO.findOneAndRemove({
+    user : userId,
+    socketId : socketId
+  })
+  .then(connection => {
+    if(connection) {
+      return getCurrentRoomConnections(connection.room);
+    }
+
+    return null;
+  });
+}
+
+/**
+* @name getCurrentRoomConnections
+* @description
+*
+* @param  {string} roomId Room ID or room code.
+* @return {object} Object has two properties
+*
+* + room : Room of socket connection.
+* + connections : Current list connections of room.
+*/
+function getCurrentRoomConnections(roomId) {
+  if(!roomId) return null;
+
+  const getConnections = RoomConnectionDAO.find({ room : roomId }).populate('user');
+  const getRoom = RoomModel.getRoomByCodeOrID(roomId);
+
+  return Promise.all([getRoom, getConnections]).then(results => {
+    return {
+      room : results[0],
+      connections : results[1]
+    };
+  });
 }
 
 /**
@@ -34,12 +109,8 @@ function disconnectUser(userId, roomId) {
 * @return {promise.<object>}  User room object after created.
 */
 function joinRoom(userId, roomId, password) {
-  let _selectedRoom;
-
   return RoomModel.getRoomByCodeOrID(roomId)
   .then(room => {
-    _selectedRoom = room;
-
     // TODO: Move authenticate function to RoomModel.
     if(room.authenticate(password)) {
       return RoomModel.isJoined(userId, roomId);

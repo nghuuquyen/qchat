@@ -1,10 +1,10 @@
 "use strict";
 
 const Mongoose = require('mongoose');
+const ObjectId = Mongoose.Types.ObjectId;
 const UserRoomDAO = Mongoose.model('UserRoom');
 const RoomDAO = Mongoose.model('Room');
 const ChatMessageDAO = Mongoose.model('ChatMessage');
-const UserDAO = Mongoose.model('User');
 const ApiError = require('../errors/ApiError');
 
 const LIMIT_LOAD_MESSAGES = 50;
@@ -34,14 +34,20 @@ module.exports = {
 function getRoomByCodeOrID(roomIdOrCode) {
   const _cond = {
     $or:[
-      { code : roomIdOrCode },
-      { id : roomIdOrCode }
+      { code : roomIdOrCode }
     ]
   };
 
+  // When find by ObjectId we must check and cast it.
+  if(ObjectId.isValid(roomIdOrCode)) {
+    _cond.$or.push({
+      _id : new ObjectId(roomIdOrCode)
+    });
+  }
+
   return RoomDAO.findOne(_cond).then(room => {
     if(room) return room;
-    
+
     throw new ApiError('Room not found.');
   });
 }
@@ -157,10 +163,13 @@ function getRoomMessages(roomId, pageNumber = 0) {
 * @return {promise.<boolean>} TRUE if joined and FALSE if not.
 */
 function isJoined(userId, roomId) {
-  return UserRoomDAO.findOne({
-    user: userId,
-    room : roomId
-  }).then(doc => {
+  return getRoomByCodeOrID(roomId).then(room => {
+    return UserRoomDAO.findOne({
+      user: userId,
+      room : room.id
+    });
+  })
+  .then(doc => {
     if(doc) return true;
 
     return false;
