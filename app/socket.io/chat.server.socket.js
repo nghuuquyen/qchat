@@ -36,6 +36,29 @@ module.exports = function (io) {
   });
 };
 
+
+function joinRoom(socket, roomCode) {
+  const _user = _.get(socket, 'request.user');
+  // RoomService.connectUser(userId, roomCode);
+  // It add user to connection list for save user id and socket id.
+  // It should return current connection list
+  // and broadcase new user + current connection list.
+}
+
+function leftRoom(socket, roomCode) {
+  // RoomService.disconnectUser(userId, roomCode);
+  // It remove user from connection list
+  // It should return current connection list
+  // and broadcase removed user + current connection list.
+}
+
+
+
+function broadcastMessage(socket, message) {
+  // RoomService.isJoined(userId, roomCode);
+  // If joined -> ChatService.saveMessage() -> Socket broadcast message;
+}
+
 function getUserData(socket) {
   const _user = _.get(socket, 'request.user');
   if(!_user) return;
