@@ -21,31 +21,20 @@
 
     function activate() {
       vm.room = room;
-      vm.room.connections = [];
 
       Socket.connect('/chatroom');
 
       Socket.on('connect', function() {
         Socket.emit('join', { code : room.code });
-
-        // Push current logger user to list connections.
-        vm.room.connections.push(Authentication.user);
+        updateListConnections(vm.room.connections);
       });
 
       Socket.on('has-new-member', function(data) {
-        data.connections.forEach(function(item) {
-          // Only push if user not exits
-          if(findConnectionUser(item.user.username) === -1) {
-            vm.room.connections.push(item.user);
-          }
-        });
+        updateListConnections(data.connections);
       });
 
-      Socket.on('user-logout', function(data) {
-        var _index = findConnectionUser(data.user.username);
-        if(_index === -1) return;
-
-        vm.room.connections.splice(_index, 1);
+      Socket.on('member-logout', function(data) {
+        updateListConnections(data.connections);
       });
 
       Socket.on('message', function(message) {
@@ -53,9 +42,13 @@
       });
     }
 
-    function findConnectionUser(username) {
-      return vm.room.connections.findIndex(function(conn) {
-        return conn.username === username;
+    function updateListConnections(connections) {
+      vm.room.joined.forEach(function(user) {
+        var _index = connections.findIndex(function(item) {
+          return user._id === item.user._id;
+        });
+        
+        user.isOnline = _index !== -1;
       });
     }
 
@@ -78,6 +71,7 @@
     // Remove the event listener when the controller instance is destroyed
     $scope.$on('$destroy', function () {
       Socket.removeListener('has-new-member');
+      Socket.removeListener('member-logout');
       Socket.removeListener('message');
     });
   }

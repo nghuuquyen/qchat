@@ -2,16 +2,15 @@
 
 const RoomModel = require('../models').Room;
 const RoomConnectionDAO = require('mongoose').model('RoomConnection');
-
 const ApiError = require('../errors/ApiError');
 
 module.exports = {
-  joinRoom : joinRoom,
-  connectUser : connectUser,
-  disconnectUser : disconnectUser,
-  getRoomMessages : getRoomMessages,
-  getInternalRoomData : getInternalRoomData,
-  getUserJoinedRooms : getUserJoinedRooms
+  joinRoom,
+  connectUser,
+  disconnectUser,
+  getRoomMessages,
+  getInternalRoomData,
+  getUserJoinedRooms
 };
 
 /**
@@ -111,17 +110,21 @@ function getCurrentRoomConnections(roomId) {
 function joinRoom(userId, roomId, password) {
   return RoomModel.getRoomByCodeOrID(roomId)
   .then(room => {
-    // TODO: Move authenticate function to RoomModel.
+    return RoomModel.isJoined(userId, roomId).then(isJoined => {
+      if(isJoined) throw new ApiError('User already joined');
+
+      return room;
+    });
+  })
+  .then(room => {
     if(room.authenticate(password)) {
-      return RoomModel.isJoined(userId, roomId);
+      return room;
     }
 
     throw new ApiError('Password of room not correct.');
   })
-  .then(isJoined => {
-    if(isJoined) throw new ApiError('User already joined');
-
-    return RoomModel.joinRoom(userId, roomId);
+  .then(room => {
+    return RoomModel.joinRoom(userId, room.id);
   });
 }
 
@@ -154,6 +157,7 @@ function getInternalRoomData(userId, roomIdOrCode) {
   })
   .then(populateRoomUsers)
   .then(populateRoomMessages)
+  .then(populateRoomConnections)
   .then(room => {
     // For security problem.
     delete room.password;
@@ -213,6 +217,16 @@ function ensureUserJoinRoom(userId, roomId) {
   });
 }
 
+function populateRoomConnections(room) {
+  return RoomConnectionDAO.find({room : room.id || room._id })
+  .populate('user')
+  .then(connections => {
+    room.connections = connections;
+    
+    return room;
+  });
+}
+
 /**
 * @name populateRoomUsers
 * @description
@@ -222,7 +236,7 @@ function ensureUserJoinRoom(userId, roomId) {
 * @return {promise.<object>}      Room after populated
 */
 function populateRoomUsers(room) {
-  return RoomModel.getAllUserInRoom(room.id).then(users => {
+  return RoomModel.getAllUserInRoom(room.id || room._id).then(users => {
     room.joined  = users.joined;
     room.pending = users.pending;
     room.blocked = users.blocked;
@@ -240,9 +254,9 @@ function populateRoomUsers(room) {
 * @return {promise.<object>}      Room after populated
 */
 function populateRoomMessages(room) {
-  return RoomModel.getRoomMessages(room.id, 0).then(messages => {
+  return RoomModel.getRoomMessages(room.id || room._id, 0)
+  .then(messages => {
     room.messages = messages;
-
     return room;
   });
 }

@@ -1,5 +1,6 @@
 "use strict";
 
 module.exports = {
-  Room : require('./RoomService')
+  Room : require('./RoomService'),
+  Message : require('./MessageService')
 };

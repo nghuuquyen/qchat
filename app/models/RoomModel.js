@@ -15,12 +15,12 @@ const LIMIT_LOAD_MESSAGES = 50;
 * @todo Implement methods requestJoinRoom
 */
 module.exports = {
-  joinRoom : joinRoom,
-  isJoined : isJoined,
-  getRoomByCodeOrID : getRoomByCodeOrID,
-  getRoomMessages : getRoomMessages,
-  getAllUserInRoom : getAllUserInRoom,
-  getUserJoinedRooms : getUserJoinedRooms
+  joinRoom,
+  isJoined,
+  getRoomByCodeOrID,
+  getRoomMessages,
+  getAllUserInRoom,
+  getUserJoinedRooms
 };
 
 /**
@@ -55,7 +55,7 @@ function getRoomByCodeOrID(roomIdOrCode) {
 /**
 * @name joinRoom
 * @description
-* Do create and save Join Room record to database.
+* Do create and save join room information to database.
 *
 * @param  {string} roomId Room ID.
 * @param  {number} userId User ID
@@ -147,10 +147,7 @@ function getRoomMessages(roomId, pageNumber = 0) {
   .populate('author')
   .limit(LIMIT_LOAD_MESSAGES)
   .skip(pageNumber * LIMIT_LOAD_MESSAGES)
-  .sort({ createdAt: 1 })
-  .then(messages => {
-    return messages;
-  });
+  .sort({ createdAt: 1 });
 }
 
 /**

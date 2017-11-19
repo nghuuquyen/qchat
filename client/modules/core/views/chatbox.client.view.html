@@ -3,7 +3,7 @@
   <hr/>
   <!-- chatbox -->
   <div class="row chatbox">
-    <div class="col-sm-10">
+    <div class="col-sm-9">
       <!-- message item -->
       <div class="chat-content">
         <div class="media" ng-repeat="message in vm.room.messages">
@@ -45,14 +45,14 @@
       <!-- ./ chatbox input -->
     </div>
 
-    <div class="col-sm-2 user-list blue-scrollbar hidden-xs">
-      <div class="media" ng-repeat="user in vm.room.connections" >
+    <div class="col-sm-3 user-list blue-scrollbar hidden-xs">
+      <div class="media" ng-repeat="user in vm.room.joined" >
         <div class="media-left">
           <img src="http://via.placeholder.com/100x100" class="media-object">
         </div>
         <div class="media-body">
           <h4 class="media-heading">{{user.username}}</h4>
-          <span class="label label-success">Online</span>
+          <span ng-if="user.isOnline" class="label label-success">Online</span>
         </div>
       </div>
     </div>

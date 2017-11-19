@@ -1,7 +1,8 @@
 'use strict';
 
 const RoomService = require('../services').Room;
-const ChatMessage =  require('mongoose').model('ChatMessage');
+const MessageService =  require('../services').Message;
+
 const logger = require('../../config/lib/logger');
 
 const _ = require('lodash');
@@ -16,28 +17,33 @@ module.exports = function (io) {
   // Chatroom namespace
   io.of('/chatroom').on('connection', socket => {
     const _user = socket.request.user;
+
     logger.debug(`User ${_user.username} connected for chatting.`);
 
     socket.on('join', data => {
-      // TODO: Must check if user have permission to join room.
-      logger.debug(`User ${_user.username} join room.`);
+      logger.debug(`User ${_user.username} join room ${data.code}`);
       joinRoom(socket, data.code);
     });
 
     socket.on('message', data => {
-      // TODO: Must check if user have permission send message to room.
-      logger.debug(`User ${_user.username} send message in room ${data.code}`);
-      sendMessage(socket, data.code, data.message);
+      broadcastMessage(socket, data.code, data.message);
     });
 
     socket.on('disconnect', () => {
-      logger.debug(`User ${_user.username} left room.`);
+      logger.debug(`User ${_user.username} left room`);
       leftRoom(socket);
     });
   });
 };
 
-
+/**
+* @name joinRoom
+* @description
+* Save socketId and request userId to connection list of room.
+*
+* @param  {object} socket   Request socket instance.
+* @param  {object} roomCode Room code
+*/
 function joinRoom(socket, roomCode) {
   const _user = _.get(socket, 'request.user');
 
@@ -45,39 +51,49 @@ function joinRoom(socket, roomCode) {
   .then(data => {
     if(!data) return;
 
-    socket.broadcast.to(data.room.code).emit('has-new-member', data.connections);
+    // Connect user to room.
+    socket.join(data.room.code);
+
+    socket.broadcast.to(data.room.code).emit('has-new-member', data);
   });
 }
 
+/**
+* @name leftRoom
+* @description
+* Remove socketId and request userId to connection list from room.
+*
+* @param  {object} socket Request socket instance.
+*/
 function leftRoom(socket) {
   const _user = _.get(socket, 'request.user');
 
   RoomService.disconnectUser(_user.id, socket.id)
   .then(data => {
     if(!data) return;
-    
-    socket.broadcast.to(data.room.code).emit('member-logout', data.connections);
+
+    // Remove user from room.
+    socket.leave(data.room.code);
+
+    socket.broadcast.to(data.room.code).emit('member-logout', data);
   });
 }
 
+/**
+* @name broadcastMessage
+* @description
+* Save and broadcast new message to other members in room.
+*
+* @param  {object} socket   Socket request instance
+* @param  {string} roomCode Room code
+* @param  {string} message  Message content
+*/
+function broadcastMessage(socket, roomCode, message) {
+  const _user = _.get(socket, 'request.user');
 
-
-function broadcastMessage(socket, message) {
-  // RoomService.isJoined(userId, roomCode);
-  // If joined -> ChatService.saveMessage() -> Socket broadcast message;
-}
-
-function sendMessage(socket, code, message) {
-  // Save message to database.
-  const msg = new ChatMessage({
-    content: message.content || '',
-    roomCode : code,
-    author : socket.request.user
-  });
-
-  msg.save().then(message => {
-    // Emit to room members
-    socket.broadcast.to(code).emit('message', {
+  MessageService.saveMessage(message.content, _user.id, roomCode)
+  .then(message => {
+    socket.broadcast.to(roomCode).emit('message', {
       content : message.content,
       author : _.get(socket, 'request.user')
     });
