@@ -17,6 +17,7 @@
 
     // Public methods.
     vm.createNewRoom = createNewRoom;
+    vm.joinRoom = joinRoom;
 
     activate();
 
@@ -37,7 +38,31 @@
         }
       })
       .then(function(modal) {
-        modal.element.modal();
+        modal.element.modal({
+          backdrop: 'static'
+        });
+
+        modal.close.then(function(newRoom) {
+          if(!newRoom) return;
+
+          vm.rooms.push(newRoom);
+        });
+      });
+    }
+
+    function joinRoom() {
+      ModalService.showModal({
+        templateUrl: 'client/modules/core/views/join-room.client.view.html',
+        controller: 'RoomModalController',
+        controllerAs : 'vm',
+        preClose: function(modal) {
+          modal.element.modal('hide');
+        }
+      })
+      .then(function(modal) {
+        modal.element.modal({
+          backdrop: 'static'
+        });
 
         modal.close.then(function(newRoom) {
           if(!newRoom) return;
