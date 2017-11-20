@@ -29,15 +29,15 @@ var noReturnUrls = [
 ];
 
 module.exports = {
-  signup : signup,
-  signin : signin,
-  signout : signout,
-  renderSignupPage : renderSignupPage,
-  renderSigninPage : renderSigninPage
+  signup,
+  signin,
+  signout,
+  renderSignupPage,
+  renderSigninPage
 };
 
 function renderSigninPage(req, res) {
-  
+
   // Check user in session or passport session.
   if(req.user || req.isAuthenticated()) {
     return res.redirect(REDIRECT_URL_AFTER_LOGGED);

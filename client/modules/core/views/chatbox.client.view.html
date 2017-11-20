@@ -6,7 +6,7 @@
   <div class="row chatbox">
     <div class="col-sm-9">
       <!-- message item -->
-      <div class="chat-content">
+      <div class="chat-content" id="chat-messages">
         <div class="media" ng-repeat="message in vm.room.messages">
           <div class="media-left" ng-if="vm.loggedUser.username !== message.author.username">
             <img src="http://via.placeholder.com/150x150" class="media-object">
