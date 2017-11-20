@@ -9,18 +9,66 @@
   .module('core')
   .controller('RoomController', Controller);
 
-  Controller.$inject = ['$scope', 'Authentication', 'ChatService'];
+  Controller.$inject = ['$scope', 'Authentication', 'ChatService', 'ModalService'];
 
   /* @ngInject */
-  function Controller($scope, Authentication, ChatService) {
+  function Controller($scope, Authentication, ChatService, ModalService) {
     var vm = this;
-    
+
+    // Public methods.
+    vm.createNewRoom = createNewRoom;
+    vm.joinRoom = joinRoom;
+
     activate();
 
     function activate() {
       // Get all joned rooms of logged user.
       ChatService.getUserRooms().then(function(rooms) {
         vm.rooms = rooms;
+      });
+    }
+
+    function createNewRoom() {
+      ModalService.showModal({
+        templateUrl: 'client/modules/core/views/create-room.client.view.html',
+        controller: 'RoomModalController',
+        controllerAs : 'vm',
+        preClose: function(modal) {
+          modal.element.modal('hide');
+        }
+      })
+      .then(function(modal) {
+        modal.element.modal({
+          backdrop: 'static'
+        });
+
+        modal.close.then(function(newRoom) {
+          if(!newRoom) return;
+
+          vm.rooms.push(newRoom);
+        });
+      });
+    }
+
+    function joinRoom() {
+      ModalService.showModal({
+        templateUrl: 'client/modules/core/views/join-room.client.view.html',
+        controller: 'RoomModalController',
+        controllerAs : 'vm',
+        preClose: function(modal) {
+          modal.element.modal('hide');
+        }
+      })
+      .then(function(modal) {
+        modal.element.modal({
+          backdrop: 'static'
+        });
+
+        modal.close.then(function(newRoom) {
+          if(!newRoom) return;
+
+          vm.rooms.push(newRoom);
+        });
       });
     }
   }

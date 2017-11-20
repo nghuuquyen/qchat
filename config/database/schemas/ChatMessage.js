@@ -8,15 +8,15 @@ var ChatMessageSchema = new Mongoose.Schema({
     type: String,
     required: 'Chat message can not empty'
   },
-  room : {
-    type : Schema.Types.ObjectId,
-    required : 'Room not allow empty',
-    ref : 'Room'
-  },
   author : {
     type : Schema.Types.ObjectId,
     required : 'Author not allow empty',
     ref : 'User'
+  },
+  room : {
+    type : Schema.Types.ObjectId,
+    required : 'Room not allow empty',
+    ref : 'Room'
   },
   updatedAt: {
     type: Date

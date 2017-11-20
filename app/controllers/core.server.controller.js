@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = {
-  renderHomePage : renderHomePage,
-  isAuthenticated : isAuthenticated
+  renderHomePage,
+  isAuthenticated
 };
 
 /**

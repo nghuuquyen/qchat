@@ -48,11 +48,16 @@
       return $resource('/api/secure/room').query().$promise;
     }
 
+    function createRoom(data) {
+      return $resource('/api/secure/room').save(data).$promise;
+    }
+
     return {
       getRoomByCode : getRoomByCode,
       getRoomData : getRoomData,
       getRoomMessages : getRoomMessages,
       joinRoom : joinRoom,
+      createRoom : createRoom,
       getUserRooms : getUserRooms
     };
   }

@@ -5,11 +5,6 @@ const Schema = Mongoose.Schema;
 const RamdomString = require('../helpers/RamdomString');
 const hsPassword = require('../helpers/HashSaltPassword');
 
-/**
-* Each connection object represents a user connected through a unique socket.
-* Each connection object composed of {userId + socketId}. Both of them together are unique.
-*
-*/
 var RoomSchema = new Schema({
   name: {
     type: String, required: true
@@ -37,11 +32,6 @@ var RoomSchema = new Schema({
     required : 'Author is required',
     ref: 'User'
   },
-  connections: [{
-    userId: String,
-    socketId: String,
-    default : []
-  }],
   updatedAt: {
     type: Date
   },

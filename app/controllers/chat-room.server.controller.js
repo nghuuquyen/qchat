@@ -1,16 +1,35 @@
 "use strict";
-const ChatRoom = require('../models/ChatRoom');
+
+const RoomService = require('../services').Room;
 const ApiError = require('../errors/ApiError');
 
 module.exports = {
-  renderChatRoomPage : renderChatRoomPage,
-  getRoomByCode : getRoomByCode,
-  getRoomData : getRoomData,
-  joinRoom : joinRoom,
-  getMessages : getMessages,
-  getUserRooms : getUserRooms
+  renderChatRoomPage,
+  joinRoom,
+  getRoomByCode,
+  getInternalRoomData,
+  getMessages,
+  getUserJoinedRooms,
+  createRoom
 };
 
+
+/**
+* @name createRoom
+* @description
+* Do create new room
+*
+* @param  {object}   req  HTTP request
+* @param  {object}   res  HTTP response
+* @param  {Function} next Next middleware
+*/
+function createRoom(req, res, next) {
+  RoomService.createRoom(req.body, req.user.username)
+  .then(newRoom => {
+    res.json(newRoom);
+  })
+  .catch(err => next(err));
+}
 
 /**
 * @name renderChatRoomPage
@@ -37,9 +56,8 @@ function renderChatRoomPage(req, res) {
 * @param  {function} next Next middleware
 */
 function getRoomByCode(req, res, next) {
-  let roomCode = req.params.roomCode;
-
-  ChatRoom.getRoomByCode(roomCode).then(room => {
+  RoomService.getRoomByCodeOrID(req.params.roomCode)
+  .then(room => {
     res.json(room);
   })
   .catch(err => next(err));
@@ -56,10 +74,9 @@ function getRoomByCode(req, res, next) {
 * @param  {object}   res  HTTP response
 * @param  {function} next Next middleware
 */
-function getRoomData(req, res, next) {
-  let roomCode = req.params.roomCode;
-
-  ChatRoom.getRoomData(req.user, roomCode).then(room => {
+function getInternalRoomData(req, res, next) {
+  RoomService.getInternalRoomData(req.user.id, req.params.roomCode)
+  .then(room => {
     res.json(room);
   })
   .catch(err => next(err));
@@ -76,14 +93,15 @@ function getRoomData(req, res, next) {
 * @param  {function} next Next middleware
 */
 function joinRoom(req, res, next) {
-  let roomCode = req.params.roomCode;
-  let password = req.body.password;
+  const roomCode = req.params.roomCode;
+  const password = req.body.password;
 
   if(!password) {
     res.send(new ApiError(400, "'password' is required"));
   }
 
-  ChatRoom.joinRoom(req.user, roomCode, password).then(room => {
+  RoomService.joinRoom(req.user.id , roomCode, password)
+  .then(room => {
     res.json(room);
   })
   .catch(err => next(err));
@@ -99,14 +117,15 @@ function joinRoom(req, res, next) {
 * @param  {function} next Next middleware
 */
 function getMessages(req, res, next) {
-  let roomCode = req.params.roomCode;
-  let page = req.params.page;
+  const roomCode = req.params.roomCode;
+  const page = req.params.page;
 
-  ChatRoom.getRoomByCode(roomCode).then(room => {
-    return ChatRoom.ensureUserJoinRoom(req.user, room);
+  RoomService.getRoomByCodeOrID(roomCode)
+  .then(room => {
+    return RoomService.ensureUserJoinRoom(req.user, room);
   })
   .then(room => {
-    return ChatRoom.getMessages(roomCode, page);
+    return RoomService.getRoomMessages(roomCode, page);
   })
   .then(messages => {
     res.json(messages);
@@ -123,8 +142,9 @@ function getMessages(req, res, next) {
 * @param  {object}   res  HTTP response
 * @param  {function} next Next middleware
 */
-function getUserRooms(req, res, next) {
-  ChatRoom.getUserRooms(req.user).then(rooms => {
+function getUserJoinedRooms(req, res, next) {
+  RoomService.getUserJoinedRooms(req.user.id)
+  .then(rooms => {
     res.json(rooms);
   })
   .catch(err => next(err));
