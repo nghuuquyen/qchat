@@ -37,6 +37,12 @@ module.exports = {
 };
 
 function renderSigninPage(req, res) {
+  
+  // Check user in session or passport session.
+  if(req.user || req.isAuthenticated()) {
+    return res.redirect(REDIRECT_URL_AFTER_LOGGED);
+  }
+
   res.render(VIEWS.SIGNIN_PAGE, {
     messages : 'Flash messages here'
   });

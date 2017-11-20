@@ -27,7 +27,8 @@ var RoomConnection = new Mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    expires: 60 * 60 * 24 // Auto remove after 1 day
   }
 });
 

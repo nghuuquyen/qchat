@@ -16,6 +16,7 @@ const LIMIT_LOAD_MESSAGES = 50;
 */
 module.exports = {
   joinRoom,
+  createRoom,
   isJoined,
   getRoomByCodeOrID,
   getRoomMessages,
@@ -49,6 +50,27 @@ function getRoomByCodeOrID(roomIdOrCode) {
     if(room) return room;
 
     throw new ApiError('Room not found.');
+  });
+}
+
+/**
+* @name createRoom
+* @description
+* Do create new room
+*
+* @param  {object} room      Room data.
+* @param  {string} authorId  Author ID.
+* @return {promise.<object>} Room after created.
+*/
+function createRoom(room, authorId) {
+  return RoomDAO.create({
+    name : room.name || 'No Name',
+    password : room.password,
+    author : authorId
+  })
+  .then(newRoom => {
+    // After create we need join author to that room.
+    return joinRoom(newRoom.author, newRoom.id).then(() => newRoom);
   });
 }
 

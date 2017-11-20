@@ -4,14 +4,32 @@ const RoomService = require('../services').Room;
 const ApiError = require('../errors/ApiError');
 
 module.exports = {
-  renderChatRoomPage : renderChatRoomPage,
-  joinRoom : joinRoom,
-  getRoomByCode : getRoomByCode,
-  getInternalRoomData : getInternalRoomData,
-  getMessages : getMessages,
-  getUserJoinedRooms : getUserJoinedRooms
+  renderChatRoomPage,
+  joinRoom,
+  getRoomByCode,
+  getInternalRoomData,
+  getMessages,
+  getUserJoinedRooms,
+  createRoom
 };
 
+
+/**
+* @name createRoom
+* @description
+* Do create new room
+*
+* @param  {object}   req  HTTP request
+* @param  {object}   res  HTTP response
+* @param  {Function} next Next middleware
+*/
+function createRoom(req, res, next) {
+  RoomService.createRoom(req.body, req.user.username)
+  .then(newRoom => {
+    res.json(newRoom);
+  })
+  .catch(err => next(err));
+}
 
 /**
 * @name renderChatRoomPage

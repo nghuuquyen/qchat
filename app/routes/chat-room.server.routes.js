@@ -18,7 +18,7 @@ router.route('/api/secure/*', function(req, res, next) {
   if(!req.user) {
     return res.send(new ApiError(403, 'Authorization Error'));
   }
-  
+
   next();
 });
 
@@ -26,6 +26,7 @@ router.route('/api/room/:roomCode')
 .get(Ctrl.getRoomByCode);
 
 router.route('/api/secure/room')
+.post(Ctrl.createRoom)
 .get(Ctrl.getUserJoinedRooms);
 
 router.route('/api/secure/room/:roomCode')

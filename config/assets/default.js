@@ -17,7 +17,8 @@ module.exports = {
         'public/lib/bootstrap/dist/js/bootstrap.min.js',
         'public/lib/angular/angular.min.js',
         'public/lib/angular-ui-router/release/angular-ui-router.min.js',
-        'public/lib/angular-resource/angular-resource.min.js'
+        'public/lib/angular-resource/angular-resource.min.js',
+        'public/lib/angular-modal-service/dst/angular-modal-service.min.js'
       ],
       tests: []
     },

@@ -3,9 +3,11 @@
 const RoomModel = require('../models').Room;
 const RoomConnectionDAO = require('mongoose').model('RoomConnection');
 const ApiError = require('../errors/ApiError');
+const UserDAO = require('mongoose').model('User');
 
 module.exports = {
   joinRoom,
+  createRoom,
   connectUser,
   disconnectUser,
   getRoomMessages,
@@ -93,6 +95,18 @@ function getCurrentRoomConnections(roomId) {
       room : results[0],
       connections : results[1]
     };
+  });
+}
+
+
+function createRoom(room, authorUsername) {
+  return UserDAO.findOne({ username : authorUsername })
+  .then(user => {
+    if(!user) throw new ApiError('User not found !');
+    return user;
+  })
+  .then(user => {
+    return RoomModel.createRoom(room, user.id);
   });
 }
 
@@ -222,7 +236,7 @@ function populateRoomConnections(room) {
   .populate('user')
   .then(connections => {
     room.connections = connections;
-    
+
     return room;
   });
 }
