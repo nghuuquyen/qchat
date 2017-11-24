@@ -177,16 +177,14 @@ function getRoomMessages(roomId, pageNumber = 0) {
 * @description
 * Check if given user is joined given room or not.
 *
-* @param  {object}  user  User need to check
-* @param  {string}  room  Room object
+* @param  {object}  userId  User ID
+* @param  {string}  roomId  Room ID
 * @return {promise.<boolean>} TRUE if joined and FALSE if not.
 */
 function isJoined(userId, roomId) {
-  return getRoomByCodeOrID(roomId).then(room => {
-    return UserRoomDAO.findOne({
-      user: userId,
-      room : room.id
-    });
+  return UserRoomDAO.findOne({
+    user: userId,
+    room : roomId
   })
   .then(doc => {
     if(doc) return true;
