@@ -17,6 +17,11 @@
     $stateProvider.state('chat', {
       url: '/u',
       views : {
+        'chat-room@' : {
+          templateUrl: _baseUrl + '/dashboard.client.view.html',
+          controller : 'DashboardController',
+          controllerAs : 'vm'
+        },
         'sidebar-content@' : {
           templateUrl: _baseUrl + '/chat.sidebar.client.view.html',
           controller : 'RoomController',

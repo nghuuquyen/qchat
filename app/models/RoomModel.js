@@ -81,7 +81,7 @@ function createRoom(room, authorId) {
 *
 * @param  {string} roomId Room ID.
 * @param  {number} userId User ID
-* @return {promise.<object>} UserRoom object.
+* @return {promise.<object>} New Joined room object.
 */
 function joinRoom(userId, roomId) {
   const record = new UserRoomDAO({
@@ -90,7 +90,10 @@ function joinRoom(userId, roomId) {
     status : 'JOINED'
   });
 
-  return record.save();
+  return record.save().then(doc => {
+    // Return new joined room.
+    return getRoomByCodeOrID(doc.room);
+  });
 }
 
 

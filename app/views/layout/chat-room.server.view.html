@@ -24,8 +24,12 @@
     {{> 'default-header.server.view'}}
   </header>
 
-  <main ui-view="root">
+  <main ui-view="root" class="page-content">
     {{{body}}}
   </main>
+
+  <footer>
+    {{> 'default-footer.server.view'}}
+  </footer>
 </div>
 <!-- ./ page content -->
