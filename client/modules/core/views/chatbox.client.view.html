@@ -4,12 +4,12 @@
 
   <!-- chatbox -->
   <div class="row chatbox">
-    <div class="col-sm-9">
+    <div class="col-xs-12 col-sm-9">
       <!-- message item -->
       <div class="chat-content" id="chat-messages">
         <div class="media" ng-repeat="message in vm.room.messages">
           <div class="media-left" ng-if="vm.loggedUser.username !== message.author.username">
-            <img src="http://via.placeholder.com/150x150" class="media-object">
+            <img src="/assets/images/default-avatar.png" class="media-object">
           </div>
 
           <div class="media-body" ng-class="{
@@ -19,7 +19,7 @@
           </div>
 
           <div class="media-right" ng-if="vm.loggedUser.username === message.author.username">
-            <img src="http://via.placeholder.com/150x150" class="media-object">
+            <img src="/assets/images/default-avatar.png" class="media-object">
           </div>
         </div>
         <!-- ./ message item -->
@@ -27,29 +27,32 @@
       <br/><br/>
 
       <!-- chatbox input -->
-      <form>
-        <div class="row">
-          <div class="col-sm-10 col-xs-10">
-            <textarea class="form-control" rows="3"
-            ng-model="vm.message"></textarea>
-          </div>
-
-          <div class="col-sm-2 col-xs-2">
-            <button ng-click="vm.sendMessage(vm.message !== '')"
-            type="button"
-            class="btn btn-primary">
-            Send</button>
-          </div>
+      <form class="form-inline" ng-submit="vm.sendMessage(vm.message !== '')">
+        <div class="col-xs-9 form-group" style="padding: 0;">
+          <input class="form-control" type="text" style="width: 100%; height:40px;"
+          placeholder="Type your message ..."
+          ng-model="vm.message"></input>
         </div>
-        <br/>
+
+        <div class="col-xs-3 form-group">
+          <button type="submit" class="btn btn-primary">
+            Send
+          </button>
+        </div>
       </form>
       <!-- ./ chatbox input -->
     </div>
+    <br/><br/>
 
-    <div class="col-sm-3 user-list blue-scrollbar hidden-xs">
+    <!-- Members list -->
+    <div class="col-xs-12 visible-xs">
+      <h3>Members</h3>
+      <hr/>
+    </div>
+    <div class="col-xs-12 col-sm-3 user-list blue-scrollbar">
       <div class="media" ng-repeat="user in vm.room.joined" >
         <div class="media-left">
-          <img src="http://via.placeholder.com/100x100" class="media-object">
+          <img src="/assets/images/default-avatar.png" class="media-object">
         </div>
         <div class="media-body">
           <h4 class="media-heading">{{user.username}}</h4>
@@ -57,6 +60,7 @@
         </div>
       </div>
     </div>
+    <!-- ./ Members list -->
   </div>
   <!-- ./ chatbox -->
 </section>

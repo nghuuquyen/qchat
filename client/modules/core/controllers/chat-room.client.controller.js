@@ -90,6 +90,9 @@
       Socket.removeListener('has-new-member');
       Socket.removeListener('member-logout');
       Socket.removeListener('message');
+
+      // Must call that for server remove connection.
+      Socket.close();
     });
   }
 })();

@@ -2,6 +2,9 @@
   min-height: 100vh;
 }
 
+.page-content {
+  min-height: 100vh;
+}
 
 /* ----------------------
 | Page content
@@ -27,16 +30,20 @@
   #sidebar {
     margin-left: -250px;
   }
+
   #sidebar.active {
     // Please keep !important for toggle sidebar.
     margin-left: 0 !important;
   }
+
   #content {
     width: 100%;
   }
+
   #content.active {
     width: calc(100% - 250px);
   }
+
   #sidebarCollapse span {
     display: none;
   }

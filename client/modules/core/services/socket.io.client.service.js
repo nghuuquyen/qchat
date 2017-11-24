@@ -14,6 +14,7 @@
       emit: emit,
       on: on,
       removeListener: removeListener,
+      close: close,
       socket: null
     };
 
@@ -49,6 +50,12 @@
     function removeListener(eventName) {
       if (service.socket) {
         service.socket.removeListener(eventName);
+      }
+    }
+
+    function close() {
+      if (service.socket) {
+        service.socket.close();
       }
     }
   }

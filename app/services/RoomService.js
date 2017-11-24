@@ -124,7 +124,7 @@ function createRoom(room, authorUsername) {
 function joinRoom(userId, roomId, password) {
   return RoomModel.getRoomByCodeOrID(roomId)
   .then(room => {
-    return RoomModel.isJoined(userId, roomId).then(isJoined => {
+    return RoomModel.isJoined(userId, room.id).then(isJoined => {
       if(isJoined) throw new ApiError('User already joined');
 
       return room;
@@ -224,10 +224,12 @@ function getUserJoinedRooms(userId) {
 * @return TRUE if user already joined to that room.
 */
 function ensureUserJoinRoom(userId, roomId) {
-  return RoomModel.isJoined(userId, roomId).then(isJoined => {
-    if(isJoined) return true;
+  return RoomModel.getRoomByCodeOrID(roomId).then(room => {
+    return RoomModel.isJoined(userId, room.id).then(isJoined => {
+      if(isJoined) return true;
 
-    throw new ApiError('User not joined this room');
+      throw new ApiError('User not joined this room');
+    });
   });
 }
 
