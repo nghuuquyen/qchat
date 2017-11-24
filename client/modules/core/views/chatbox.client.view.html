@@ -42,8 +42,14 @@
       </form>
       <!-- ./ chatbox input -->
     </div>
+    <br/><br/>
 
-    <div class="col-xs-12 col-sm-3 user-list blue-scrollbar hidden-xs">
+    <!-- Members list -->
+    <div class="col-xs-12 visible-xs">
+      <h3>Members</h3>
+      <hr/>
+    </div>
+    <div class="col-xs-12 col-sm-3 user-list blue-scrollbar">
       <div class="media" ng-repeat="user in vm.room.joined" >
         <div class="media-left">
           <img src="/assets/images/default-avatar.png" class="media-object">
@@ -54,6 +60,7 @@
         </div>
       </div>
     </div>
+    <!-- ./ Members list -->
   </div>
   <!-- ./ chatbox -->
 </section>

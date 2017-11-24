@@ -25,4 +25,8 @@ router.route('/u').get(
   ChatRoomCtrl.renderChatRoomPage
 );
 
+// Make sure all routes has prefix u is authenticated.
+router.route('/u/*')
+.get(CoreCtrl.isAuthenticated);
+
 module.exports = router;
